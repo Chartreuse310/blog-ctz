@@ -39,3 +39,7 @@ tags:
 - Revit
 - AutoCAD
 	- AutoCAD初始设置
+
+## 鉴赏
+
+- [荒野生存 Into the Wild（2007）](/design/260520_into-the-wild)
