@@ -1,5 +1,6 @@
 <script setup>
 import { data as posts } from '../../posts.data'
+import { withBase } from 'vitepress'
 import { computed } from 'vue'
 
 const recent = computed(() => {
@@ -17,7 +18,7 @@ const formatTags = (tags) => {
 <template>
   <div class="recent-section">
     <div class="recent-grid">
-      <a v-for="post in recent" :key="post.url" :href="post.url" class="recent-card">
+      <a v-for="post in recent" :key="post.url" :href="withBase(post.url)" class="recent-card">
         <span class="recent-title">{{ post.title }}</span>
         <div class="recent-bottom">
           <div class="recent-tags">
