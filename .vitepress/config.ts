@@ -48,7 +48,8 @@ export default defineConfig({
         {
           text: '设计',
           items: [
-            { text: '索引', link: '/design/' }
+            { text: '索引', link: '/design/' },
+            { text: '荒野生存 Into the Wild（2007）', link: '/design/260520_into-the-wild' }
           ]
         }
       ],
