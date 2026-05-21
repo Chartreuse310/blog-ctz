@@ -13,14 +13,14 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: '首页', link: '/' },
       { text: '建筑学', link: '/architecture/' },
       { text: '设计', link: '/design/' },
       { text: '程序', link: '/dev/' },
       { text: '绘画', link: '/drawing/' },
       { text: '吉他', link: '/guitar/' },
       { text: 'PKM', link: '/pkm/' },
-      { text: '读书笔记', link: '/reading/' }
+      { text: '读书笔记', link: '/reading/' },
+      { text: 'All', link: '/all' }
     ],
 
     sidebar: {
@@ -49,7 +49,12 @@ export default defineConfig({
           text: '设计',
           items: [
             { text: '索引', link: '/design/' },
-            { text: '荒野生存 Into the Wild（2007）', link: '/design/260520_into-the-wild' }
+            {
+              text: '鉴赏',
+              items: [
+                { text: '荒野生存 Into the Wild（2007）', link: '/design/260520_into-the-wild' }
+              ]
+            }
           ]
         }
       ],

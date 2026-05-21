@@ -137,3 +137,15 @@
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
 
+/**
+ * Component: Nav
+ * -------------------------------------------------------------------------- */
+
+.VPNav a[href*="/all"] {
+  color: var(--vp-c-text-2) !important;
+  font-weight: 600;
+}
+.VPNav a[href*="/all"].active {
+  color: var(--vp-c-brand-1) !important;
+}
+
