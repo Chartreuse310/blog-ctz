@@ -3,7 +3,7 @@ import { data as posts } from '../../posts.data'
 import { withBase } from 'vitepress'
 import { computed, ref } from 'vue'
 
-const selectedYear = ref(null)
+const selectedTime = ref(null)
 const selectedTags = ref([])
 
 const allPosts = computed(() =>
@@ -13,6 +13,45 @@ const allPosts = computed(() =>
 const years = computed(() => {
   const set = new Set(allPosts.value.map(p => new Date(p.date).getFullYear()))
   return [...set].sort((a, b) => b - a)
+})
+
+const countByTime = (key) => {
+  const now = new Date()
+  return allPosts.value.filter(p => {
+    const d = new Date(p.date)
+    switch (key) {
+      case 'today':
+        return d.toDateString() === now.toDateString()
+      case '3days': {
+        const ago = new Date(now)
+        ago.setDate(ago.getDate() - 3)
+        ago.setHours(0, 0, 0, 0)
+        return d >= ago
+      }
+      case 'week': {
+        const day = now.getDay() || 7
+        const start = new Date(now)
+        start.setDate(start.getDate() - day + 1)
+        start.setHours(0, 0, 0, 0)
+        return d >= start
+      }
+      case 'month':
+        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+      default:
+        return d.getFullYear() === key
+    }
+  }).length
+}
+
+const timeOptions = computed(() => {
+  const fixed = [
+    { key: 'today', label: '今天' },
+    { key: '3days', label: '最近三天' },
+    { key: 'week', label: '本周' },
+    { key: 'month', label: '本月' },
+  ]
+  const yearOpts = years.value.map(y => ({ key: y, label: String(y) }))
+  return [...fixed, ...yearOpts].map(o => ({ ...o, count: countByTime(o.key) }))
 })
 
 const tagTree = computed(() => {
@@ -41,9 +80,34 @@ const tagTree = computed(() => {
 
 const filtered = computed(() => {
   return allPosts.value.filter(p => {
-    if (selectedYear.value !== null) {
-      const y = new Date(p.date).getFullYear()
-      if (y !== selectedYear.value) return false
+    if (selectedTime.value !== null) {
+      const d = new Date(p.date)
+      const now = new Date()
+      switch (selectedTime.value) {
+        case 'today':
+          if (d.toDateString() !== now.toDateString()) return false
+          break
+        case '3days': {
+          const ago = new Date(now)
+          ago.setDate(ago.getDate() - 3)
+          ago.setHours(0, 0, 0, 0)
+          if (d < ago) return false
+          break
+        }
+        case 'week': {
+          const day = now.getDay() || 7
+          const start = new Date(now)
+          start.setDate(start.getDate() - day + 1)
+          start.setHours(0, 0, 0, 0)
+          if (d < start) return false
+          break
+        }
+        case 'month':
+          if (d.getMonth() !== now.getMonth() || d.getFullYear() !== now.getFullYear()) return false
+          break
+        default:
+          if (d.getFullYear() !== selectedTime.value) return false
+      }
     }
     if (selectedTags.value.length > 0) {
       return selectedTags.value.every(tag =>
@@ -54,8 +118,8 @@ const filtered = computed(() => {
   })
 })
 
-const toggleYear = (year) => {
-  selectedYear.value = selectedYear.value === year ? null : year
+const toggleTime = (key) => {
+  selectedTime.value = selectedTime.value === key ? null : key
 }
 
 const toggleParent = (parent) => {
@@ -79,7 +143,7 @@ const toggleTag = (tag) => {
 }
 
 const clearFilters = () => {
-  selectedYear.value = null
+  selectedTime.value = null
   selectedTags.value = []
 }
 
@@ -96,15 +160,15 @@ const formatTags = (tags) => {
         <span class="filter-label">时间</span>
         <button
           class="filter-chip"
-          :class="{ active: selectedYear === null }"
-          @click="selectedYear = null"
+          :class="{ active: selectedTime === null }"
+          @click="selectedTime = null"
         >全部</button>
         <button
-          v-for="year in years" :key="year"
+          v-for="opt in timeOptions" :key="opt.key"
           class="filter-chip"
-          :class="{ active: selectedYear === year }"
-          @click="toggleYear(year)"
-        >{{ year }}</button>
+          :class="{ active: selectedTime === opt.key }"
+          @click="toggleTime(opt.key)"
+        >{{ opt.label }} <small>{{ opt.count }}</small></button>
       </div>
       <div v-for="group in tagTree" :key="group.name" class="filter-row">
         <button
@@ -120,7 +184,7 @@ const formatTags = (tags) => {
         >{{ child }} <small>{{ count }}</small></button>
       </div>
       <button
-        v-if="selectedYear !== null || selectedTags.length > 0"
+        v-if="selectedTime !== null || selectedTags.length > 0"
         class="clear-btn"
         @click="clearFilters"
       >清除筛选</button>

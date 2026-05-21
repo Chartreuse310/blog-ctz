@@ -54,6 +54,12 @@ export default defineConfig({
               items: [
                 { text: '荒野生存 Into the Wild（2007）', link: '/design/260520_into-the-wild' }
               ]
+            },
+            {
+              text: '行业观察',
+              items: [
+                { text: '米哈游招聘交流会', link: '/design/260519_mihoyo' }
+              ]
             }
           ]
         }
