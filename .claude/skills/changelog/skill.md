@@ -19,15 +19,32 @@ Maintain the project's changelog at `changelog.md` with structured, versioned en
 ```markdown
 # 更新日志
 
-## X.Y.Z (YYYY-MM-DD)
+::: info 修改类型（紧急程度顺序，一般先修改再新建）
+🏗️ 初始化 → 🐛 修复 → ✏️ 修改页面 → 📄 增加页面 → 📝 修改笔记 → 📖 增加笔记
+:::
 
-<emoji> <分组标题>
+## V.X.Y.Z (YYYY-MM-DD)
 
-- 条目一
-- 条目二
+<emoji> <类型>
+
+- 主要条目
+	- 缩进的详细描述
 ```
 
 Version numbers follow semver (major.minor.patch). Date is the release date.
+
+## Modification Types
+
+Within each version, group changes by type **in this order**:
+
+| Emoji | Type | What goes here |
+|-------|------|----------------|
+| 🏗️ | 初始化 | Initial setup, scaffolding, first-time configuration |
+| 🐛 | 修复 | Bug fixes, broken links, build failures |
+| ✏️ | 修改页面 | Changes to existing pages, layouts, components, sidebar/nav |
+| 📄 | 增加页面 | New pages, new features, new interactions |
+| 📝 | 修改笔记 | Edits to existing article content |
+| 📖 | 增加笔记 | New articles/note posts |
 
 ## Steps
 
@@ -50,39 +67,37 @@ Gather what changed since the last version entry:
 
 ### Step 3 — Categorize and write
 
-Categorize changes into groups. Use these standard groups and emoji when applicable:
+Categorize changes using the modification types above, in the specified order. Each type group is a heading with emoji. Items under each type use `- ` with optional indented `\t- ` for details.
 
-| Emoji | Group | What goes here |
-|-------|-------|----------------|
-| 📄 | 新文章 | Articles published on the version date |
-| 📖 | 旧有文章回顾 | Articles dated before the version date, linked in this release |
-| 🏗️ | 基础搭建 | Infrastructure, scaffolding, new sections |
-| 🎨 | 外观 | Theme, styling, layout changes |
-| 🔍 | 功能 | New features, pages, interactions |
-| 📈 | 数据/图表 | Charts, statistics, data visualization |
-| 🗂️ | 侧边栏/导航 | Sidebar, nav bar changes |
-| 📝 | 排版 | Markdown plugins, typography |
-| 🔧 | 工具 | Skills, scripts, dev tooling |
-| 🐛 | 修复 | Bug fixes |
-| 🚀 | 性能 | Performance improvements |
+Example:
+```markdown
+✏️ 修改页面
 
-Add new groups as needed, always with an emoji prefix.
+- 首页折线图——完整时间线、标签显示在折线点上
+- 设计索引——增加"行业观察"分组
+
+📄 增加页面
+
+- All——按时间和标签筛选所有文章
+	- 时间筛选：今天 / 最近三天 / 本周 / 本月 / 按年份
+	- 标签按父/子分组显示，支持多标签 AND 筛选
+```
 
 ### Step 4 — Article entries
 
-For article entries (新文章 and 旧有文章回顾), use this format:
+For 📖 增加笔记 entries, use this format:
 
-**新文章** (article date = version date):
+**Article date = version date:**
 ```
-- [文章标题](base路径)——栏目/分组名
-```
-
-**旧有文章回顾** (article date < version date):
-```
-- [文章标题](base路径)（YYYY-MM-DD）——栏目/分组名
+- [文章标题](路径)——栏目/分组名
 ```
 
-The link uses the VitePress base path format: `/blog-ctz/<section>/<filename-without-ext>`.
+**Article date < version date:**
+```
+- [文章标题](路径)（YYYY-MM-DD）——栏目/分组名
+```
+
+The link uses the VitePress base path format: `/<section>/<filename-without-ext>`.
 The `——` suffix shows the section sidebar path (栏目/分组).
 
 To determine the sidebar path, read `.vitepress/config.ts` and find where the article is registered.
@@ -90,7 +105,7 @@ To determine the sidebar path, read `.vitepress/config.ts` and find where the ar
 ### Step 5 — Insert the entry
 
 - If the version already exists in changelog.md, **update** its content (merge new groups/items).
-- If it's a new version, **insert** it at the top (after `# 更新日志`), before all existing versions.
+- If it's a new version, **insert** it after the `::: info` block, before all existing versions.
 - Do not touch other version entries.
 
 ## Rules
@@ -98,6 +113,6 @@ To determine the sidebar path, read `.vitepress/config.ts` and find where the ar
 - Always read the current `changelog.md` before editing.
 - Always read `.vitepress/config.ts` to determine sidebar paths for article entries.
 - Use Edit, not Write, to modify changelog.md — preserve original formatting.
-- Keep entries concise: one line per item, no explanations beyond the bullet point.
+- Keep entries concise: one line per item, indented details for elaboration only.
 - If the user only asks to update a specific section, only modify that section.
 - Bump `version` in `package.json` to match the new changelog version.
