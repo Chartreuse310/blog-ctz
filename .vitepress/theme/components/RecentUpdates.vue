@@ -6,7 +6,7 @@ import { computed } from 'vue'
 const recent = computed(() => {
   return posts
     .sort((a, b) => new Date(b.date) - new Date(a.date))
-    .slice(0, 21)
+    .slice(0, 3)
 })
 
 const formatTags = (tags) => {
