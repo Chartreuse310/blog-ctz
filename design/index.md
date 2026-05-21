@@ -43,3 +43,7 @@ tags:
 ## 鉴赏
 
 - [荒野生存 Into the Wild（2007）](/design/260520_into-the-wild)
+
+## 行业观察
+
+- [米哈游招聘交流会](/design/260519_mihoyo)（2026-05-19）

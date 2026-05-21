@@ -17,7 +17,7 @@
 
 📖 旧有文章回顾
 
-- [米哈游招聘交流会](/blog-ctz/design/260519_mihoyo)（2026-05-19）——设计/行业观察
+- [米哈游招聘交流会](/design/260519_mihoyo)（2026-05-19）——设计/行业观察
 
 🗂️ 侧边栏
 
@@ -27,11 +27,11 @@
 
 📄 新文章
 
-- [荒野生存 Into the Wild（2007）](/blog-ctz/design/260520_into-the-wild)——设计/鉴赏
+- [荒野生存 Into the Wild（2007）](/design/260520_into-the-wild)——设计/鉴赏
 
 📖 旧有文章回顾
 
-- [张利"城市人因：阅读与设计高质量生活"](/blog-ctz/architecture/260331_zhang-li_urban-ergonomics)（2026-03-31）——建筑学/建筑设计
+- [张利"城市人因：阅读与设计高质量生活"](/architecture/260331_zhang-li_urban-ergonomics)（2026-03-31）——建筑学/建筑设计
 
 🏗️ 基础搭建
 
