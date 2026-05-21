@@ -2,48 +2,51 @@
 import { data as posts } from '../../posts.data'
 import { computed } from 'vue'
 
-const DAYS = 30
-
 const chartData = computed(() => {
-  const now = new Date()
-  const startDate = new Date(now)
-  startDate.setDate(startDate.getDate() - DAYS + 1)
+  if (posts.length === 0) return []
+
+  const sorted = [...posts].sort((a, b) => new Date(a.date) - new Date(b.date))
+  const startDate = new Date(sorted[0].date)
+  startDate.setHours(0, 0, 0, 0)
+  const endDate = new Date(sorted[sorted.length - 1].date)
+  endDate.setHours(0, 0, 0, 0)
 
   const counts = {}
-  for (let i = 0; i < DAYS; i++) {
-    const d = new Date(startDate)
-    d.setDate(d.getDate() + i)
+  const d = new Date(startDate)
+  while (d <= endDate) {
     counts[key(d)] = 0
+    d.setDate(d.getDate() + 1)
   }
 
   posts.forEach(p => {
-    const d = new Date(p.date)
-    const k = key(d)
+    const k = key(new Date(p.date))
     if (k in counts) counts[k]++
   })
 
   const entries = []
-  for (let i = 0; i < DAYS; i++) {
-    const d = new Date(startDate)
-    d.setDate(d.getDate() + i)
-    entries.push({ date: d, count: counts[key(d)] })
+  const cur = new Date(startDate)
+  while (cur <= endDate) {
+    entries.push({ date: new Date(cur), count: counts[key(cur)] })
+    cur.setDate(cur.getDate() + 1)
   }
 
   return entries
 })
+
+const totalDays = computed(() => Math.max(chartData.value.length, 1))
 
 const maxCount = computed(() => Math.max(1, ...chartData.value.map(d => d.count)))
 
 const width = 700
 const height = 120
 const padX = 30
-const padY = 10
+const padY = 22
 const chartW = width - padX * 2
 const chartH = height - padY * 2
 
 const coords = computed(() => {
   return chartData.value.map((d, i) => ({
-    x: padX + (i / (DAYS - 1)) * chartW,
+    x: padX + (i / (totalDays.value - 1)) * chartW,
     y: padY + chartH - (d.count / maxCount.value) * chartH
   }))
 })
@@ -75,17 +78,39 @@ const areaPath = computed(() => {
 })
 
 const xLabels = computed(() => {
-  const labels = []
-  const step = Math.ceil(DAYS / 6)
-  chartData.value.forEach((d, i) => {
-    if (i % step === 0 || i === DAYS - 1) {
-      const x = padX + (i / (DAYS - 1)) * chartW
-      const label = `${d.date.getMonth() + 1}/${d.date.getDate()}`
-      labels.push({ x, label })
-    }
+  const data = chartData.value
+  if (data.length <= 7) {
+    return data.map((d, i) => ({
+      x: padX + (i / (totalDays.value - 1)) * chartW,
+      label: formatLabel(d.date)
+    }))
+  }
+
+  const withCount = data.map((d, i) => ({ ...d, i })).filter(d => d.count > 0)
+  withCount.sort((a, b) => b.count - a.count)
+  const picks = withCount.slice(0, 6)
+  picks.push(data[data.length - 1])
+  picks.sort((a, b) => a.i - b.i)
+
+  const seen = new Set()
+  return picks.filter(d => {
+    const k = d.i ?? data.indexOf(d)
+    if (seen.has(k)) return false
+    seen.add(k)
+    return true
+  }).map(d => {
+    const idx = d.i ?? data.length - 1
+    const x = padX + (idx / (totalDays.value - 1)) * chartW
+    const y = padY + chartH - (data[idx].count / maxCount.value) * chartH
+    return { x, y, label: formatLabel(d.date) }
   })
-  return labels
 })
+
+function formatLabel(d) {
+  return totalDays.value > 180
+    ? `${d.getFullYear()}/${d.getMonth() + 1}`
+    : `${d.getMonth() + 1}/${d.getDate()}`
+}
 
 function key(d) {
   return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
@@ -94,7 +119,7 @@ function key(d) {
 
 <template>
   <div class="activity-chart">
-    <svg :viewBox="`0 0 ${width} ${height + 16}`" class="chart-svg" preserveAspectRatio="xMidYMid meet">
+    <svg :viewBox="`0 0 ${width} ${height}`" class="chart-svg" preserveAspectRatio="xMidYMid meet">
       <defs>
         <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="var(--vp-c-brand-1)" stop-opacity="0.25" />
@@ -104,7 +129,8 @@ function key(d) {
       <path :d="areaPath" fill="url(#areaGrad)" />
       <path :d="linePath" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" stroke-linecap="round" />
       <template v-for="label in xLabels" :key="label.x">
-        <text :x="label.x" :y="height + 12" text-anchor="middle" class="axis-label">{{ label.label }}</text>
+        <circle :cx="label.x" :cy="label.y" r="3" fill="var(--vp-c-brand-1)" />
+        <text :x="label.x" :y="label.y - 8" text-anchor="middle" class="point-label">{{ label.label }}</text>
       </template>
     </svg>
   </div>
@@ -138,5 +164,10 @@ function key(d) {
 .axis-label {
   font-size: 10px;
   fill: var(--vp-c-text-3);
+}
+.point-label {
+  font-size: 10px;
+  fill: var(--vp-c-text-2);
+  font-weight: 500;
 }
 </style>
