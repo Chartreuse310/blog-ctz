@@ -20,7 +20,7 @@ Maintain the project's changelog at `changelog.md` with structured, versioned en
 # 更新日志
 
 ::: info 修改类型（紧急程度顺序，一般先修改再新建）
-🏗️ 初始化 → 🐛 修复 → ✏️ 修改页面 → 📄 增加页面 → 📝 修改笔记 → 📖 增加笔记
+🏗️ 初始化 → 🐛 修复 → ⚙️ 修改框架 → ✏️ 修改页面 → 📄 增加页面 → 📝 修改笔记 → 📖 增加笔记
 :::
 
 ## V.X.Y.Z (YYYY-MM-DD)
@@ -41,6 +41,7 @@ Within each version, group changes by type **in this order**:
 |-------|------|----------------|
 | 🏗️ | 初始化 | Initial setup, scaffolding, first-time configuration |
 | 🐛 | 修复 | Bug fixes, broken links, build failures |
+| ⚙️ | 修改框架 | Site-wide framework changes: new frontmatter fields, favicon, global data pipeline, theme infrastructure |
 | ✏️ | 修改页面 | Changes to existing pages, layouts, components, sidebar/nav |
 | 📄 | 增加页面 | New pages, new features, new interactions |
 | 📝 | 修改笔记 | Edits to existing article content |

@@ -20,7 +20,13 @@ const formatDate = (date) => {
 
 <template>
   <div v-if="frontmatter.date || frontmatter.tags" class="article-meta">
-    <span v-if="frontmatter.date" class="meta-date">{{ formatDate(frontmatter.date) }}</span>
+    <span v-if="frontmatter.date" class="meta-date">
+      {{ formatDate(frontmatter.date) }}
+      <template v-if="frontmatter.modified">
+        <span class="meta-arrow"> → </span>
+        <span class="meta-modified">{{ formatDate(frontmatter.modified) }}</span>
+      </template>
+    </span>
     <div v-if="frontmatter.tags" class="meta-tags">
       <span v-for="tag in formatTags(frontmatter.tags)" :key="tag" class="meta-tag">{{ tag }}</span>
     </div>
@@ -39,6 +45,12 @@ const formatDate = (date) => {
 .meta-date {
   font-size: 13px;
   color: var(--vp-c-text-3);
+}
+.meta-arrow {
+  color: var(--vp-c-text-3);
+}
+.meta-modified {
+  color: #81c784;
 }
 .meta-tags {
   display: flex;

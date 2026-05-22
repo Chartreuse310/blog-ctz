@@ -29,6 +29,7 @@ Perform these three transformations on the file content:
    - `date`: use today's date (`YYYY-MM-DD`).
    - `tags`: ask the user, or leave as an empty array.
    - Tags use the hierarchical `Parent/Child` format (e.g. `Resources/影`, `Knowledge/Film`).
+   - **`modified`**: if the file already has a `date` (i.e. it's being re-published/updated), add or update a `modified` field with today's date (`YYYY-MM-DD`). Do not add `modified` to brand-new files that just got their `date` set.
 
 2. **Shift headings down one level** — insert a new H1 matching the `title` from frontmatter. Then shift all existing headings: H1→H2, H2→H3, etc. Do **not** add a duplicate H1 if one already matches the title exactly.
 

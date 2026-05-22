@@ -13,6 +13,7 @@ export default createContentLoader('**/*.md', {
           url: page.url,
           title,
           date: formatDate(page.frontmatter.date),
+          modified: formatDate(page.frontmatter.modified),
           tags: page.frontmatter.tags as string[]
         }
       })

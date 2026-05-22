@@ -8,7 +8,7 @@ export default defineConfig({
   title: "CTZ / Making & Thinking",
   description: "A designer's notes on building things — from code to craft.",
   head: [
-    ['link', { rel: 'icon', href: '/blog-ctz/favicon.ico' }]
+    ['link', { rel: 'icon', href: '/blog-ctz/favicon.png', type: 'image/png' }]
   ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
