@@ -7,7 +7,7 @@ const selectedTime = ref(null)
 const selectedTags = ref([])
 
 const allPosts = computed(() =>
-  [...posts].sort((a, b) => new Date(b.date) - new Date(a.date))
+  [...posts].sort((a, b) => new Date(b.modified || b.date) - new Date(a.modified || a.date))
 )
 
 const years = computed(() => {
@@ -199,7 +199,8 @@ const formatTags = (tags) => {
           <div class="recent-tags">
             <span v-for="tag in formatTags(post.tags)" :key="tag" class="recent-tag">{{ tag }}</span>
           </div>
-          <span class="recent-date">{{ post.date }}</span>
+          <span v-if="post.modified" class="recent-date recent-modified">{{ post.modified }}</span>
+          <span v-else class="recent-date">{{ post.date }}</span>
         </div>
       </a>
     </div>
@@ -343,5 +344,8 @@ const formatTags = (tags) => {
   color: var(--vp-c-text-3);
   flex-shrink: 0;
   margin-left: 8px;
+}
+.recent-modified {
+  color: #81c784;
 }
 </style>
