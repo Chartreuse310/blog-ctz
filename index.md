@@ -6,8 +6,8 @@ hero:
   name: "CTZ"
   text: Making & Thinking.
   image:
-    src: /沙楚子头像-抽象.excalidraw.png
-    alt: CTZ
+    src: /avatar-excalidraw.png
+    alt: ？
     width: 120
   actions:
     - theme: brand
